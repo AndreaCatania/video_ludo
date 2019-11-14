@@ -531,7 +531,7 @@ impl Video {
         self.duration
     }
 
-    pub fn buffer(&mut self) -> &mut StreamBufferConsumer<BufferedFrame> {
+    pub fn buffer_mut(&mut self) -> &mut StreamBufferConsumer<BufferedFrame> {
         &mut self.buffer
     }
 }

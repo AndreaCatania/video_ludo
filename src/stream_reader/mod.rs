@@ -67,6 +67,21 @@ pub enum StreamReaderInfo {
     // Subtitle, TODO support ?
 }
 
+impl StreamReaderInfo{
+    /// Returns a `StreamReaderInfo` that takes the best video stream and outputs
+    /// a texture of type `U8U8U8`.
+    /// The created buffer size is 500mb.
+    pub fn best_video() -> StreamReaderInfo {
+        StreamReaderInfo::Video {
+            filter_frame_height: ComparatorFilter::Greater,
+            filter_frame_width: ComparatorFilter::Greater,
+            out_image_type: OutPixelFormat::Specific(video_reader::PixelFormat::U8U8U8),
+            out_image_size: OutImageSize::Original,
+            buffer_size_mb: 500,
+        }
+    }
+}
+
 /// This enum is used to specify the comparator method that you want to use for a specific filter.
 #[derive(Copy, Clone, Debug)]
 pub enum ComparatorFilter {

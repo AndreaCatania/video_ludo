@@ -15,7 +15,10 @@
    height="184.22501"
    viewBox="0 0 746.31895 184.22501"
    sodipodi:docname="logo.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/andrea/Workspace/git/video_ludo/logo.svg.png"
+   inkscape:export-xdpi="32.157822"
+   inkscape:export-ydpi="32.157822">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -24,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -45,8 +48,8 @@
      showgrid="false"
      width="492.683px"
      inkscape:zoom="0.50381358"
-     inkscape:cx="289.83343"
-     inkscape:cy="-231.50833"
+     inkscape:cx="471.44822"
+     inkscape:cy="-96.537772"
      inkscape:window-x="0"
      inkscape:window-y="18"
      inkscape:window-maximized="0"
