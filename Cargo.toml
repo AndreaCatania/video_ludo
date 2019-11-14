@@ -1,0 +1,11 @@
+[package]
+name = "video_ludo"
+version = "1.0.0"
+authors = ["Andrea Catania <info@andreacatania.com>"]
+edition = "2018"
+
+[dependencies]
+ffmpeg-sys = {version = "3.4.1"}
+libc = "0.2.65"
+ringbuf = "0.2.1"
+rayon = "1.2.0"
