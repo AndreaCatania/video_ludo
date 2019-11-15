@@ -165,8 +165,8 @@ pub trait Voidable {
 /// In this way, if we store a really big vector we can reuse this memory location.
 ///
 /// - 2. Another feature of this buffer is to have a batch sorting mechanism;
-/// before to make an element available to client, it is inserted inside a 
-/// `sort_buffer`. When the function `flush` is called all the elements in the 
+/// before to make an element available to client, it is inserted inside a
+/// `sort_buffer`. When the function `flush` is called all the elements in the
 /// `sort_buffer` get sorted and then sent to the client.
 #[derive(Debug)]
 pub struct StreamBuffer {}

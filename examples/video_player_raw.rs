@@ -4,15 +4,16 @@ extern crate glium;
 use std::path::Path;
 
 use glium::{
-    texture::{
-        ClientFormat, RawImage2d,
-    },
-    Texture2d
+    texture::{ClientFormat, RawImage2d},
+    Texture2d,
 };
 
 use video_ludo::{
-    stream_reader::{StreamInfo, ComparatorFilter, video_reader::{Video, OutImageSize, OutPixelFormat, PixelFormat}},
-    MovieReader
+    stream_reader::{
+        video_reader::{OutImageSize, OutPixelFormat, PixelFormat, Video},
+        ComparatorFilter, StreamInfo,
+    },
+    MovieReader,
 };
 
 // This example just show how to use a `MovieReader`, with custom `StreamInfo`,
@@ -39,8 +40,9 @@ fn main() {
     // Creates the `MovieReader`, this function returns a `MovieReader` and a
     // list containing the `StreamReaderEntries` which can be used to extract
     // the stream data.
-    let (mut movie_reader, mut stream_entries) = MovieReader::try_new(Path::new("resources/Ettore.ogv"), stream_info)
-        .expect("Movie Reader creation fail!");
+    let (mut movie_reader, mut stream_entries) =
+        MovieReader::try_new(Path::new("resources/Ettore.ogv"), stream_info)
+            .expect("Movie Reader creation fail!");
 
     // Takes the stream buffer entry
     let mut video = stream_entries.pop().unwrap().downcast::<Video>().unwrap();
@@ -54,7 +56,6 @@ fn main() {
 
         // Take a frame from the video buffer.
         if let Some(frame) = video.buffer_mut().pop() {
-
             // Copy the data into a texture.
             let raw = RawImage2d {
                 data: std::borrow::Cow::Owned(frame.data.clone()),
@@ -67,7 +68,7 @@ fn main() {
             video.buffer_mut().finalize_pop();
 
             Some(Texture2d::new(display, raw).expect("Texture not stored!"))
-        }else{
+        } else {
             None
         }
     });

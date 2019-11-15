@@ -2,12 +2,9 @@ use std::borrow::Cow;
 
 use glium::{
     glutin::{self, Event, WindowEvent},
-    VertexBuffer,
-    texture::{
-        ClientFormat, RawImage2d,
-    },
-    Program,
-    Display, Surface, Texture2d, index::PrimitiveType,
+    index::PrimitiveType,
+    texture::{ClientFormat, RawImage2d},
+    Display, Program, Surface, Texture2d, VertexBuffer,
 };
 
 pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
@@ -30,7 +27,8 @@ pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
     let def_texture = Texture2d::new(&display, raw).unwrap();
     let mut texture: Option<Texture2d> = None;
 
-    let index_buffer = glium::IndexBuffer::new(&display, PrimitiveType::TriangleStrip, &[1u16, 2, 0, 3]).unwrap();
+    let index_buffer =
+        glium::IndexBuffer::new(&display, PrimitiveType::TriangleStrip, &[1u16, 2, 0, 3]).unwrap();
 
     // building the vertex buffer, which contains all the vertices that we will draw
     let vertex_buffer = {
@@ -42,18 +40,31 @@ pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
 
         implement_vertex!(Vertex, position, tex_coords);
 
-        VertexBuffer::new(&display, 
+        VertexBuffer::new(
+            &display,
             &[
-                Vertex { position: [-1.0, -1.0], tex_coords: [0.0, 0.0] },
-                Vertex { position: [-1.0,  1.0], tex_coords: [0.0, 1.0] },
-                Vertex { position: [ 1.0,  1.0], tex_coords: [1.0, 1.0] },
-                Vertex { position: [ 1.0, -1.0], tex_coords: [1.0, 0.0] }
-            ]
-        ).unwrap()
+                Vertex {
+                    position: [-1.0, -1.0],
+                    tex_coords: [0.0, 0.0],
+                },
+                Vertex {
+                    position: [-1.0, 1.0],
+                    tex_coords: [0.0, 1.0],
+                },
+                Vertex {
+                    position: [1.0, 1.0],
+                    tex_coords: [1.0, 1.0],
+                },
+                Vertex {
+                    position: [1.0, -1.0],
+                    tex_coords: [1.0, 0.0],
+                },
+            ],
+        )
+        .unwrap()
     };
 
     let program = create_program(&display);
-
 
     let mut run = true;
     while run {
@@ -68,7 +79,7 @@ pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
         // Take the new texture or keep the old one
         texture = f(&display).or(texture);
 
-        let uniforms = uniform!{
+        let uniforms = uniform! {
             matrix: [
                 [1.0, 0.0, 0.0, 0.0],
                 [0.0, -1.0, 0.0, 0.0],
@@ -81,7 +92,15 @@ pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
         let mut target = display.draw();
         target.clear_color_srgb(1.0, 1.0, 1.0, 1.0);
 
-        target.draw(&vertex_buffer, &index_buffer, &program, &uniforms, &Default::default()).unwrap();
+        target
+            .draw(
+                &vertex_buffer,
+                &index_buffer,
+                &program,
+                &uniforms,
+                &Default::default(),
+            )
+            .unwrap();
 
         target.finish().expect("Failed to swap buffers");
     }
@@ -113,7 +132,7 @@ fn create_program(display: &Display) -> Program {
             "
         },
 
-        110 => {  
+        110 => {
             vertex: "
                 #version 110
                 uniform mat4 matrix;
@@ -136,7 +155,7 @@ fn create_program(display: &Display) -> Program {
             ",
         },
 
-        100 => {  
+        100 => {
             vertex: "
                 #version 100
                 uniform lowp mat4 matrix;
@@ -158,5 +177,6 @@ fn create_program(display: &Display) -> Program {
                 }
             ",
         },
-    ).unwrap()
+    )
+    .unwrap()
 }

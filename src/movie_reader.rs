@@ -9,7 +9,7 @@ use ringbuf::{Producer, RingBuffer};
 
 use crate::{
     daemon_reader::{DaemonCommand, DaemonReader},
-    stream_reader::{stream_reader_new, StreamEntry, StreamReader, StreamInfo},
+    stream_reader::{stream_reader_new, StreamEntry, StreamInfo, StreamReader},
     Movie,
 };
 
@@ -25,18 +25,18 @@ static FFMPEG_INIT: std::sync::Once = std::sync::Once::new();
 ///
 /// Due to the asynchronous nature of this crate, some commands doesn't have
 /// immediate effect (see: `play`, `stop`, `seek`).
-/// 
+///
 /// *Check the __README.md__ to know more about it.*
-/// 
+///
 /// # How to initialize it
 /// To construct an istance of this class, you have to call the function `try_new`
 /// that will return the `MovieReader` object and a list of `StreamReaderEntry`.
-/// 
+///
 /// This function accept a list of `StreamInfo` that describes the internal
 /// `StreamReader` that the `MovieReader` will create. Each `StreamReader` will
 /// read a stream, and you can extract the read information using the
 /// `StreamReaderEntry` returned.
-/// 
+///
 /// *Check the __README.md__ to know more about it.*
 #[allow(missing_debug_implementations)]
 pub struct MovieReader {

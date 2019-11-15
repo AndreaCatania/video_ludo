@@ -1,6 +1,6 @@
 //! The Video Ludo crate is a movie reader, written in rust lang, which allows
 //! to extract information from the various streams that compose a movie file.
-//! 
+//!
 //! To start using it you have to create an istance of 'MovieReader`, check the
 //! example or the __README.md__ to get more info about it.
 
