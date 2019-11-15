@@ -3,17 +3,15 @@ language: rust
 rust:
 - stable
 before_script:
-#- sudo add-apt-repository -y ppa:mc3man/trusty-media
-- sudo apt-get -qq update
-- sudo apt-get install -y ffmpeg
-- ffmpeg -version
-- rustup component add rustfmt --toolchain stable-x86_64-unknown-linux-gnu
-- rustup component add clippy
+#- sudo apt-get update
+#- sudo apt-get install ffmpeg
+#- rustup component add rustfmt --toolchain stable-x86_64-unknown-linux-gnu
+#- rustup component add clippy
 script:
 - cargo fmt -- --check
-- cargo build
-- cargo test --all
-- cargo clippy --all
+#- cargo build
+#- cargo test --all
+#- cargo clippy --all
 cache: cargo
 env:
   global:
