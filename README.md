@@ -22,6 +22,8 @@ Each of these are a separate streams, this mean that a file can have many stream
 of the same type.
 
 # Use Video Ludo
+Note: *Make sure that in your system is installed FFmpeg version 3.4.*
+
 Video Ludo reads as many streams as you desire and converts the codified stream data into something
 directly usable by the computer; this task is done in a separate thread, and you
 will be able to retrieve these information using a `StreamReaderEntry`.

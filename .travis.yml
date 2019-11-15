@@ -5,6 +5,7 @@ rust:
 before_script:
 - sudo apt-get update
 - sudo apt-get install ffmpeg
+- export PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig"
 - rustup component add rustfmt --toolchain stable-x86_64-unknown-linux-gnu
 - rustup component add clippy
 script:
