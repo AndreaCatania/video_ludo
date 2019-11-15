@@ -3,6 +3,12 @@ name = "video_ludo"
 version = "1.0.0"
 authors = ["Andrea Catania <info@andreacatania.com>"]
 edition = "2018"
+repository = "https://github.com/AndreaCatania/video_ludo"
+description = "Movie file reader, ready to be used."
+keywords = ["ffmpeg", "movie", "video", "audio", "codec"]
+categories = ["multimedia", "multimedia::video", "multimedia::audio"]
+readme = "README.md"
+license = "MIT"
 
 [dependencies]
 ffmpeg-sys = {version = "3.4.1"}
