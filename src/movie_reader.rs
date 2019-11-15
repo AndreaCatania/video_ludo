@@ -9,21 +9,35 @@ use ringbuf::{Producer, RingBuffer};
 
 use crate::{
     daemon_reader::{DaemonCommand, DaemonReader},
-    stream_reader::{stream_reader_new, StreamEntry, StreamReader, StreamReaderInfo},
+    stream_reader::{stream_reader_new, StreamEntry, StreamReader, StreamInfo},
     Movie,
 };
 
 static FFMPEG_INIT: std::sync::Once = std::sync::Once::new();
 
-/// The `MovieReader` is able to asynchronously load and convert the video and audio data to something
-/// that is understandable by your application.
+/// The `MovieReader` is the object that allows you to read a Movie File,
+/// it is able to asynchronously load and convert the video and audio data to
+/// something that is understandable by your application.
 ///
-/// The file reading is done in streaming where the data are processed and allocated in a buffer of
-/// fixed size. The read information are deallocated from the buffer, allowing for new data to being
-/// read.
+/// The file reading is done in streaming; The data are processed and allocated
+/// in a buffer of fixed size. The read information are deallocated from the buffer,
+/// allowing for new data to being read.
 ///
-/// Due to the asynchronous nature of this crate, some commands doesn't have immediate effect;
-/// check the docs of each function.
+/// Due to the asynchronous nature of this crate, some commands doesn't have
+/// immediate effect (see: `play`, `stop`, `seek`).
+/// 
+/// *Check the __README.md__ to know more about it.*
+/// 
+/// # How to initialize it
+/// To construct an istance of this class, you have to call the function `try_new`
+/// that will return the `MovieReader` object and a list of `StreamReaderEntry`.
+/// 
+/// This function accept a list of `StreamInfo` that describes the internal
+/// `StreamReader` that the `MovieReader` will create. Each `StreamReader` will
+/// read a stream, and you can extract the read information using the
+/// `StreamReaderEntry` returned.
+/// 
+/// *Check the __README.md__ to know more about it.*
 #[allow(missing_debug_implementations)]
 pub struct MovieReader {
     // The `movie` is never used by the `MovieReader` directly, but the task to read the movie
@@ -71,9 +85,9 @@ impl MovieReader {
     // by doing so is possible to add `StreamReader`s that are not supported by this crate.
     pub fn try_new(
         movie_path: &Path,
-        stream_readers_info: Vec<StreamReaderInfo>,
+        streams_info: Vec<StreamInfo>,
     ) -> Result<(Self, Vec<StreamEntry>), String> {
-        if stream_readers_info.is_empty() {
+        if streams_info.is_empty() {
             return Err("The stream reader info is empty".to_owned());
         }
 
@@ -89,13 +103,13 @@ impl MovieReader {
         let mut movie = Movie::try_new(movie_path)?;
 
         // Let's create the `StreamReader` vector.
-        let mut stream_readers = Vec::with_capacity(stream_readers_info.len());
+        let mut stream_readers = Vec::with_capacity(streams_info.len());
 
         // List of stream entries per each `StreamReader`.
-        let mut stream_entries = Vec::with_capacity(stream_readers_info.len());
+        let mut stream_entries = Vec::with_capacity(streams_info.len());
 
         // Creates the `StreamReader`s
-        for sri in stream_readers_info.iter() {
+        for sri in streams_info.iter() {
             let (sr, sbc) = stream_reader_new(&mut movie, sri)?;
             stream_readers.push(sr);
             stream_entries.push(sbc);

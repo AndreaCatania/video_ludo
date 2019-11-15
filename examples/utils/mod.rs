@@ -10,80 +10,6 @@ use glium::{
     Display, Surface, Texture2d, index::PrimitiveType,
 };
 
-fn create_program(display: &Display) -> Program {
-    program!(display,
-        140 => {
-            vertex: "
-                #version 140
-                uniform mat4 matrix;
-                in vec2 position;
-                in vec2 tex_coords;
-                out vec2 v_tex_coords;
-                void main() {
-                    gl_Position = matrix * vec4(position, 0.0, 1.0);
-                    v_tex_coords = tex_coords;
-                }
-            ",
-
-            fragment: "
-                #version 140
-                uniform sampler2D tex;
-                in vec2 v_tex_coords;
-                out vec4 f_color;
-                void main() {
-                    f_color = texture(tex, v_tex_coords);
-                }
-            "
-        },
-
-        110 => {  
-            vertex: "
-                #version 110
-                uniform mat4 matrix;
-                attribute vec2 position;
-                attribute vec2 tex_coords;
-                varying vec2 v_tex_coords;
-                void main() {
-                    gl_Position = matrix * vec4(position, 0.0, 1.0);
-                    v_tex_coords = tex_coords;
-                }
-            ",
-
-            fragment: "
-                #version 110
-                uniform sampler2D tex;
-                varying vec2 v_tex_coords;
-                void main() {
-                    gl_FragColor = texture2D(tex, v_tex_coords);
-                }
-            ",
-        },
-
-        100 => {  
-            vertex: "
-                #version 100
-                uniform lowp mat4 matrix;
-                attribute lowp vec2 position;
-                attribute lowp vec2 tex_coords;
-                varying lowp vec2 v_tex_coords;
-                void main() {
-                    gl_Position = matrix * vec4(position, 0.0, 1.0);
-                    v_tex_coords = tex_coords;
-                }
-            ",
-
-            fragment: "
-                #version 100
-                uniform lowp sampler2D tex;
-                varying lowp vec2 v_tex_coords;
-                void main() {
-                    gl_FragColor = texture2D(tex, v_tex_coords);
-                }
-            ",
-        },
-    ).unwrap()
-}
-
 pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
     let mut events_loop = glutin::EventsLoop::new();
     let context = glutin::ContextBuilder::new().with_vsync(true);
@@ -159,4 +85,78 @@ pub fn render<F: FnMut(&Display) -> Option<Texture2d>>(mut f: F) {
 
         target.finish().expect("Failed to swap buffers");
     }
+}
+
+fn create_program(display: &Display) -> Program {
+    program!(display,
+        140 => {
+            vertex: "
+                #version 140
+                uniform mat4 matrix;
+                in vec2 position;
+                in vec2 tex_coords;
+                out vec2 v_tex_coords;
+                void main() {
+                    gl_Position = matrix * vec4(position, 0.0, 1.0);
+                    v_tex_coords = tex_coords;
+                }
+            ",
+
+            fragment: "
+                #version 140
+                uniform sampler2D tex;
+                in vec2 v_tex_coords;
+                out vec4 f_color;
+                void main() {
+                    f_color = texture(tex, v_tex_coords);
+                }
+            "
+        },
+
+        110 => {  
+            vertex: "
+                #version 110
+                uniform mat4 matrix;
+                attribute vec2 position;
+                attribute vec2 tex_coords;
+                varying vec2 v_tex_coords;
+                void main() {
+                    gl_Position = matrix * vec4(position, 0.0, 1.0);
+                    v_tex_coords = tex_coords;
+                }
+            ",
+
+            fragment: "
+                #version 110
+                uniform sampler2D tex;
+                varying vec2 v_tex_coords;
+                void main() {
+                    gl_FragColor = texture2D(tex, v_tex_coords);
+                }
+            ",
+        },
+
+        100 => {  
+            vertex: "
+                #version 100
+                uniform lowp mat4 matrix;
+                attribute lowp vec2 position;
+                attribute lowp vec2 tex_coords;
+                varying lowp vec2 v_tex_coords;
+                void main() {
+                    gl_Position = matrix * vec4(position, 0.0, 1.0);
+                    v_tex_coords = tex_coords;
+                }
+            ",
+
+            fragment: "
+                #version 100
+                uniform lowp sampler2D tex;
+                varying lowp vec2 v_tex_coords;
+                void main() {
+                    gl_FragColor = texture2D(tex, v_tex_coords);
+                }
+            ",
+        },
+    ).unwrap()
 }

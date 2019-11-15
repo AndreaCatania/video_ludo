@@ -11,17 +11,24 @@ use glium::{
 };
 
 use video_ludo::{
-    stream_reader::{StreamReaderInfo, ComparatorFilter, video_reader::{Video, OutImageSize, OutPixelFormat, PixelFormat}},
+    stream_reader::{StreamInfo, ComparatorFilter, video_reader::{Video, OutImageSize, OutPixelFormat, PixelFormat}},
     MovieReader
 };
 
-// This example just show how to use a `MovieReader`, with custom `StreamReaderInfo`.
+// This example just show how to use a `MovieReader`, with custom `StreamInfo`,
+// to extract frames from a stream.
+//
+// _Disclaimer_
+// You may notice that the playback speed of the video is too fast.
+// This happens, because the video frames are not sync to a timer; indeed, is not
+// intention of this crate implement a Movie **Player**, rather leaves to you
+// the freedom to do it (or not).
 fn main() {
-    // Stream reader list that the `MovieReader` will internally create.
-    let mut stream_readers = Vec::new();
+    // Stream info list that the `MovieReader` will internally read.
+    let mut stream_info = Vec::new();
 
-    // Describe the video stream reader.
-    stream_readers.push(StreamReaderInfo::Video {
+    // Describe the video stream.
+    stream_info.push(StreamInfo::Video {
         filter_frame_width: ComparatorFilter::Greater,
         filter_frame_height: ComparatorFilter::Greater,
         out_image_size: OutImageSize::Original,
@@ -32,7 +39,7 @@ fn main() {
     // Creates the `MovieReader`, this function returns a `MovieReader` and a
     // list containing the `StreamReaderEntries` which can be used to extract
     // the stream data.
-    let (mut movie_reader, mut stream_entries) = MovieReader::try_new(Path::new("resources/Ettore.ogv"), stream_readers)
+    let (mut movie_reader, mut stream_entries) = MovieReader::try_new(Path::new("resources/Ettore.ogv"), stream_info)
         .expect("Movie Reader creation fail!");
 
     // Takes the stream buffer entry
@@ -41,8 +48,10 @@ fn main() {
     // Start reading the file.
     movie_reader.start_read();
 
-    
+    // Start the rendering
     utils::render(|display| -> Option<Texture2d> {
+        // Each frame this code is executed.
+
         // Take a frame from the video buffer.
         if let Some(frame) = video.buffer_mut().pop() {
 

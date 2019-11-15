@@ -18,10 +18,10 @@ pub type StreamEntry = Box<dyn std::any::Any>;
 /// This is an utility function that creates the correct `StreamReader` depending on the stream info.
 pub(crate) fn stream_reader_new(
     movie: &mut Movie,
-    stream_reader_info: &StreamReaderInfo,
+    stream_info: &StreamInfo,
 ) -> Result<(Box<dyn StreamReader>, StreamEntry), String> {
-    match stream_reader_info {
-        StreamReaderInfo::Video {
+    match stream_info {
+        StreamInfo::Video {
             filter_frame_width,
             filter_frame_height,
             out_image_type,
@@ -45,7 +45,7 @@ pub(crate) fn stream_reader_new(
 /// This enum is used to create a `StreamReader`, it has some filters that are used to select the correct
 /// stream from the Movie file.
 #[derive(Debug)]
-pub enum StreamReaderInfo {
+pub enum StreamInfo {
     /// With this type is create a `StreamReader` that reads from a stream an convert the video image
     /// to the specified `out_image_type` type.
     Video {
@@ -67,12 +67,12 @@ pub enum StreamReaderInfo {
     // Subtitle, TODO support ?
 }
 
-impl StreamReaderInfo{
-    /// Returns a `StreamReaderInfo` that takes the best video stream and outputs
+impl StreamInfo {
+    /// Returns a `StreamInfo` that takes the best video stream and outputs
     /// a texture of type `U8U8U8`.
     /// The created buffer size is 500mb.
-    pub fn best_video() -> StreamReaderInfo {
-        StreamReaderInfo::Video {
+    pub fn best_video() -> StreamInfo {
+        StreamInfo::Video {
             filter_frame_height: ComparatorFilter::Greater,
             filter_frame_width: ComparatorFilter::Greater,
             out_image_type: OutPixelFormat::Specific(video_reader::PixelFormat::U8U8U8),
@@ -164,13 +164,10 @@ pub trait Voidable {
 /// - 1. Once created, it allocates the required memory and never frees it.
 /// In this way, if we store a really big vector we can reuse this memory location.
 ///
-/// // TODO please check this docs
-/// - 2. Another feature of this buffer is to have a batch sorting mechanism; before to insert the element
-/// inside the buffer and make it available to the client, after the `pushing` the data is inserted in
-/// a vector.
-/// The producer can flush the buffer which mean that all the previoslly pushed elements are sorted
-/// and pushed inside the final buffer that the client can finally read. This mechanism is really handy
-/// for our purposes because the stream packets may be unordered (depending on the used codec).
+/// - 2. Another feature of this buffer is to have a batch sorting mechanism;
+/// before to make an element available to client, it is inserted inside a 
+/// `sort_buffer`. When the function `flush` is called all the elements in the 
+/// `sort_buffer` get sorted and then sent to the client.
 #[derive(Debug)]
 pub struct StreamBuffer {}
 
