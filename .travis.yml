@@ -4,7 +4,7 @@ rust:
 - stable
 before_script:
 - sudo apt-get update
-- sudo apt-get --install-recommends --install-suggests install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
+- sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
 - rustup component add rustfmt --toolchain stable-x86_64-unknown-linux-gnu
 - rustup component add clippy
 script:
